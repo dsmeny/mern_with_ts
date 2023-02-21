@@ -1,0 +1,11 @@
+{
+  "include": ["./src/**/*", "./server/**/*"],
+  "compilerOptions": {
+    "outDir": "dir",
+    "sourceMap": true,
+    "lib": ["ESNext", "dom"],
+    "jsx": "react-jsx",
+    "resolveJsonModule": true,
+    "esModuleInterop": true
+  }
+}
