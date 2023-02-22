@@ -1,18 +1,36 @@
 import { useEffect, useState } from "react";
+import { fetcher } from "./util/util";
 
-async function fetcher() {
-  const response = await fetch("http://192.168.0.24:3001/api");
-  const data = await response.json();
-  return data;
+interface Message {
+  message: string;
 }
 
 const App = () => {
-  const [message, setMessage] = useState("");
+  const [messages, setMessages] = useState<Message[]>([]);
 
   useEffect(() => {
-    fetcher().then((response) => setMessage(response.data));
+    fetcher().then((response) => {
+      if (!response.message.length) {
+        setMessages(response.message);
+        return;
+      }
+      setMessages(() => response.message);
+    });
   }, []);
-  return <div>{message}</div>;
+
+  if (!messages.length) {
+    return <div>No messages found</div>;
+  }
+
+  return (
+    <div>
+      <ul>
+        {messages.map((msg) => (
+          <li>{msg.message}</li>
+        ))}
+      </ul>
+    </div>
+  );
 };
 
 export default App;
