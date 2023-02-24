@@ -4,7 +4,12 @@ import cors from "cors";
 import configDB from "./config/db";
 import * as dotenv from "dotenv";
 dotenv.config();
-import { getMessages } from "./controllers/messageController";
+import {
+  getMessages,
+  postMessage,
+  putMessage,
+  deleteMessage,
+} from "./controllers/messageController";
 
 const app = express();
 
@@ -16,6 +21,9 @@ app.use(express.urlencoded({ extended: true }));
 app.use(morgan("dev"));
 
 app.get("/api", getMessages);
+app.post("/api", postMessage);
+app.put("/api/:id", putMessage);
+app.delete("/api/:id", deleteMessage);
 
 const PORT = process.env.PORT || 3001;
 

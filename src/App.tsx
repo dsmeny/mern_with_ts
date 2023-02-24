@@ -1,34 +1,30 @@
-import { useEffect, useState } from "react";
+import { useQuery } from "react-query";
 import { fetcher } from "./util/util";
 
-interface Message {
-  message: string;
-}
-
 const App = () => {
-  const [messages, setMessages] = useState<Message[]>([]);
+  const { isError, isLoading, data, error } = useQuery("messages", fetcher);
 
-  useEffect(() => {
-    fetcher().then((response) => {
-      if (!response.message.length) {
-        setMessages(response.message);
-        return;
-      }
-      setMessages(() => response.message);
-    });
-  }, []);
+  if (isLoading) {
+    return <p>loading...</p>;
+  }
 
-  if (!messages.length) {
-    return <div>No messages found</div>;
+  if (isError) {
+    return <p>An error has occured</p>;
   }
 
   return (
     <div>
-      <ul>
-        {messages.map((msg) => (
-          <li>{msg.message}</li>
-        ))}
-      </ul>
+      {!data.message.length ? (
+        <h1>Welcome!</h1>
+      ) : (
+        <ul>
+          {data.message.map(({ message, _id: id }) => (
+            <li data-id={id} key={id}>
+              <p>{message}</p>
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 };
